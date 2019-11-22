@@ -1,0 +1,26 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 8
+  pre_build:
+    commands:
+      - npm update -g npm
+      - npm install --no-save yarn
+      - yarn install
+
+  build:
+    commands:
+      - yarn run test-with-coverage
+      - yarn run build
+
+  post_build:
+    commands:
+      - ls -a
+      - cp .env ./dist/.env
+      - mv node_modules ./dist
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist
