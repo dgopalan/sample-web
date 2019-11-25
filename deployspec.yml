@@ -13,6 +13,7 @@ phases:
     commands:
       - yarn run test-with-coverage
       - yarn run build
+      - ./node_modules/.bin/sls deploy --verbose --force
 
   post_build:
     commands:

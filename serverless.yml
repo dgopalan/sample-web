@@ -1,0 +1,54 @@
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-offline
+
+service: ${env:PROJECT_NAME}
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${env:ENVIRONMENT}
+  region: ${env:REGION}
+  versionFunctions: false
+  deploymentBucket:
+    name: ${env:DEPLOYMENT_BUCKET}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "sns:publish"
+        - "sns:subscribe"
+      Resource: "arn:aws:sns:${env:REGION}:${env:AWS_ACCOUNT_ID}:*"
+  vpc:
+    securityGroupIds:
+      "Fn::Split":
+        - ","
+        - ${env:AWS_SECURITY_GROUP_IDS}
+    subnetIds:
+      "Fn::Split":
+        - ","
+        - ${env:AWS_SUBNET_IDS}
+  stackTags:
+    Stack: ${env:ENVIRONMENT}
+    Project: ${env:PROJECT_NAME}
+    TechLead: ${env:TECH_LEAD}
+    SystemName: ${env:PROJECT_NAME}
+
+functions:
+  processFormDataTranslation:
+    handler: dist/src/serverless.processFormDataTranslation
+    name: ${self:provider.stage}-${self:service}ProcessFormDataTranslation
+    events:
+      - sns: arn:aws:sns:${env:REGION}:${env:AWS_ACCOUNT_ID}:${self:resources.Resources.SubmitFormData.Properties.TopicName}
+
+resources:
+  Resources:
+    SubmitFormData:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:provider.stage}-${self:service}SubmitFormData
+        DisplayName: SNS topic which has the submitted data
+
+
+custom:
+  slsPanfw:
+      ignoreEnv: [""]
