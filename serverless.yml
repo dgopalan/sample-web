@@ -18,6 +18,10 @@ provider:
         - "sns:publish"
         - "sns:subscribe"
       Resource: "arn:aws:sns:${env:REGION}:${env:AWS_ACCOUNT_ID}:*"
+    - Effect: "Allow"
+      Action:
+        - "s3:GetBucketLocation"
+      Resource: "arn:aws:s3:::${env:DEPLOYMENT_BUCKET}"
   vpc:
     securityGroupIds:
       "Fn::Split":
