@@ -19,6 +19,7 @@ phases:
       - ls -a
       - cp .env ./dist/.env
       - mv node_modules ./dist
+      - ls ./dist -a
 
 artifacts:
   files:
