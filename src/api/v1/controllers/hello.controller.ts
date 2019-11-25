@@ -15,7 +15,7 @@ export class HelloController {
   @Description("It is used to check if the API is sending data.")
   @Returns(RESPONSE, { description: "Ok" })
   public async hello(@Res() res: Express.Response): Promise<void> {
-    res.send("Hello world");
+    res.send("Congratulations!");
   }
 
 }
