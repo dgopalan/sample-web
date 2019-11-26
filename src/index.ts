@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { $log, ServerLoader } from "@tsed/common";
-import { Server } from "./server";
+import { Server } from "./Server";
 
 async function bootstrap(): Promise<void> {
   try {
