@@ -10,18 +10,18 @@ provider:
   stage: ${env:ENVIRONMENT}
   region: ${env:REGION}
   versionFunctions: false
-  deploymentBucket:
-    name: ${env:DEPLOYMENT_BUCKET}
+#  deploymentBucket:
+#    name: ${env:DEPLOYMENT_BUCKET}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
         - "sns:publish"
         - "sns:subscribe"
       Resource: "arn:aws:sns:${env:REGION}:${env:AWS_ACCOUNT_ID}:*"
-    - Effect: "Allow"
-      Action:
-        - "s3:GetBucketLocation"
-      Resource: "arn:aws:s3:::${env:DEPLOYMENT_BUCKET}"
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:GetBucketLocation"
+#      Resource: "arn:aws:s3:::${env:DEPLOYMENT_BUCKET}"
   vpc:
     securityGroupIds:
       "Fn::Split":
@@ -38,9 +38,9 @@ provider:
     SystemName: ${env:PROJECT_NAME}
 
 functions:
-  processFormDataTranslation:
-    handler: dist/src/serverless.processFormDataTranslation
-    name: ${self:provider.stage}-${self:service}ProcessFormDataTranslation
+  helloWorld:
+    handler: dist/src/serverless.helloWorld
+    name: ${self:provider.stage}-${self:service}helloWorld
     events:
       - sns: arn:aws:sns:${env:REGION}:${env:AWS_ACCOUNT_ID}:${self:resources.Resources.SubmitFormData.Properties.TopicName}
 
